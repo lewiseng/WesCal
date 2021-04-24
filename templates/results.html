@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Results</title>
+{% endblock %}
+
+{% block body %}
+
+{{course}}
+<table>
+    <tr>
+        <th>#</th>
+        <th>Course</th>
+        <th>Instructor</th>
+        <th>Add to Calendar</th>
+    </tr>
+
+    <tr>
+        <td>{{course}}</td>
+        <td>Peter parker</td>
+        <td>{{ log[course] }}</td> 
+        <td><a href="">link</a></td>
+    </tr>
+
+</table>
+
+<a href="http://127.0.0.1:5000/">GO BACK</a>
+
+{% endblock %}
