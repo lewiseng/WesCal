@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from bs4 import BeautifulSoup, SoupStrainer
 from datetime import datetime
 from createCatalog import get_courses, get_crosslisting
@@ -6,18 +6,13 @@ from createEvent import processTime
 from fetch_data import fetchData
 
 app = Flask(__name__)
-app.secret_key = "WesHack2021"
+app.secret_key = "goWes2021"
 catalog = get_courses("Catalog - Wesleyan University - 20210424.html")
 crossDict = get_crosslisting("Catalog - Wesleyan University - 20210424.html")
-
-# @app.context_processor
-# def inject_catalog():
-#     return dict(log=fetchData(catalog[request.form["course"].upper()]))
 
 @app.route("/", methods=["POST","GET"])
 def newSearch():
     try:
-        session.clear()
         if request.method == "POST":
             courseName = request.form["course"].upper()
             if courseName in crossDict:
@@ -26,11 +21,12 @@ def newSearch():
                 session["courseName"] = courseName
                 return redirect(url_for("result"))
             else:
+                flash('Looks like you entered a wrong class number!', 'info')
                 return redirect(url_for("newSearch"))
         else:
             return render_template('index.html')
     except:
-        return "SOMETHINGS WRONG"
+        return render_template('errorPage.html') 
 
 @app.route('/result', methods=["GET"])
 def result():
@@ -45,4 +41,4 @@ def result():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

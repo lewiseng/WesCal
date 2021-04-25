@@ -4,19 +4,36 @@
 <title>Start Page</title>
 {% endblock %}
 
-
-
 {% block body %}
-<div>
-    <h1 class="my-3">Welcome!</h1>
 
-    <h5>Got tired of adding courses to Google calendar manually?</h5>
-    <h5>Try this tool and add classes with one click!</h5>
+
+<div class="container mt-5">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-warning alert-dismissible fade show pb-0 mt-1" role="alert">
+                <p>{{ msg }}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% endwith %}
+</div>
+
+
+<div>
+    <h1 class="my-3 display-3">Welcome!</h1>
+
+    <h5>Got tired of adding courses to Google calendar manually? <br>
+        Try this tool and add classes with one click!
+    </h5>
+
     
     <form action="" method='POST'>
-        <p class="mt-3" style="color: gray; font-style: italic;">Try ECON300, AFAM324, qac201, phil210  (case-insensitive!) </p> 
-        <input type="text" name="course" placeholder="Start Here" >
-        <input type="submit" value="sub">
+        <p class="mt-3" style="color: gray; font-style: italic;">Try: ECON300, AFAM324, qac201, phil210  (case-insensitive!) </p> 
+        <input type="text" name="course" placeholder="Fall 2021 Semester" >
+        <input type="submit" value="Submit">
     </form>
 
 </div>
