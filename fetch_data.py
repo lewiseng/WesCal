@@ -1,3 +1,5 @@
+#%%
+
 import urllib.request, urllib.error, urllib.parse, ssl, re, unicodedata, time, copy
 from bs4 import BeautifulSoup, SoupStrainer
 
@@ -30,11 +32,13 @@ def fetchData(url):
         secLoc = unicodedata.normalize('NFKD',find_loc[i].next_element).strip()
         res_dict[secName] = [fullName, secTime, ", ".join(rearragne), secLoc,[]]
     
-
-
     if res_dict:
         return res_dict
     else:
         return None
 
-# print(processTime(fetchData('https://owaprod-pub.wesleyan.edu/reg/!wesmaps_page.html?stuid=&crse=003331&term=1219')))
+if __name__ == "__main__":
+    print(fetchData('https://owaprod-pub.wesleyan.edu/reg/!wesmaps_page.html?stuid=&crse=003331&term=1219'))
+
+
+# %%
