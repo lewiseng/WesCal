@@ -9,18 +9,22 @@
 {% set mystr1 = session["courseName"] ~ '_01' %}
 {% set mystr2 = data[mystr1][0] %}
 <h1><a href="{{catalog[session["courseName"]]}}" target="_blank" rel="noopener noreferrer">{{mystr2}}</a> </h1>
-<div>{{data}}</div>
+
 <table>
     <tr>
         <th>Section</th>
         <th>Instructor</th>
         <th>Add to Calendar</th>
     </tr>
-    {% for item in data %} #IF TWO MEETING TIME:CASE ONE
+    {% for item in data %} 
     <tr>
         <td>{{ item[-2:] }}</td>
         <td>{{ data[item][2]}}</td>
-        <td><a href="fakelink">Click Here removing styling</a></td> 
+        <td>
+            {%- for item in data[item][4] -%}
+            <li><a href="{{ item }}" target="_blank" rel="noopener noreferrer">Click me!</a></li>
+            {%- endfor -%}
+        </td>
     </tr>
     {% endfor %}
 

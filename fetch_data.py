@@ -1,4 +1,4 @@
-import urllib.request, urllib.error, urllib.parse, ssl, re, unicodedata, time
+import urllib.request, urllib.error, urllib.parse, ssl, re, unicodedata, time, copy
 from bs4 import BeautifulSoup, SoupStrainer
 
 def fetchData(url):
@@ -36,3 +36,5 @@ def fetchData(url):
         return res_dict
     else:
         return None
+
+# print(processTime(fetchData('https://owaprod-pub.wesleyan.edu/reg/!wesmaps_page.html?stuid=&crse=003331&term=1219')))
