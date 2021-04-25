@@ -12,29 +12,27 @@ def fetchData(url):
     fhand = urllib.request.urlopen(url,context=ssl.SSLContext()).read()
     soup = BeautifulSoup(fhand, 'html.parser')
     course_id = "".join(soup.title.string.split()[-2:])
-    only_tags = SoupStrainer(id='print_sect_info')
-    soup = BeautifulSoup(fhand, 'html.parser',parse_only=only_tags)
+    soup = BeautifulSoup(fhand, 'html.parser')
+    fullName = soup.find("span", {"class": "title"}).string
     all_sect = soup.findAll(string = re.compile(r"SECTION (\d*)  "))
     find_time = soup.findAll(string='Times:')
-    find_teacher = soup.findAll(string='Instructor(s):')
-    find_loc = soup.findAll(string='Location:')
-    
-
+    find_teacher = soup.findAll(string='Instructor(s):') #TWO TEACH?
+    find_loc = soup.findAll(string='Location:') #TWO LOC?
     res_dict = {}
     for i in range(len(all_sect)):
         secName = course_id+'_'+all_sect[i].strip()[-2:]
         secTime = unicodedata.normalize('NFKD',find_time[i].next_element).strip()
-        secTeacher = find_teacher[i].parent.parent.a.get_text()
-        rearragne = re.search(r"([a-zA-Z]*),([a-zA-Z ]*)", secTeacher)
-        secTeacher = rearragne.group(2) + ' ' + rearragne.group(1)
+        secTeacher = [i.string for i in find_teacher[i].parent.parent.parent.find_all('a')]
+        rearragne = list()
+        for teacher in secTeacher:
+            regex = re.search(r"([a-zA-Z]*),([a-zA-Z ]*)", teacher)
+            rearragne.append(regex.group(2) + ' ' + regex.group(1))  
         secLoc = unicodedata.normalize('NFKD',find_loc[i].next_element).strip()
-        res_dict[secName] = (secTime, secTeacher, secLoc)
+        res_dict[secName] = [fullName, secTime, ", ".join(rearragne), secLoc,[]]
+    
 
 
     if res_dict:
         return res_dict
     else:
         return None
-
-    
-print(fetchData('https://owaprod-pub.wesleyan.edu/reg/!wesmaps_page.html?stuid=&crse=003331&term=1219'))
