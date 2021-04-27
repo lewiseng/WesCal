@@ -4,10 +4,5 @@ body{
     
 }
 
-table, td, th {
-    margin-right: auto;
-    margin-left: auto;
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
+
 
