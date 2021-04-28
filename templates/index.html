@@ -32,56 +32,68 @@
         background-repeat: no-repeat;
         background-size: cover;
     }
+    @media screen and (min-width: 1000px){
+        .warning {
+            width:40%;
+            min-width: 500px;
+        }
+    }
+    @media screen and (max-width: 1000px){
+    .warning {
+        width:80%;
+        max-width: 500px;
 
+    }
+    .warningText {
+        font-size: smaller;
+    }
+    }
 </style>
 {% endblock %}
 
 
 {% block body %}
+
 <div class="bg">
-
-
     <div class="container">
         <div style="height: 2vh;"></div>
         <div style="height: 13vh;">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for msg in messages %}
-                <div class="alert alert-warning alert-dismissible fade show pb-0" role="alert" style="width:40%; margin-left: auto; margin-right: auto;">
-                    <p>{{ msg }}</p>
+                <div class="alert alert-warning alert-dismissible fade show pb-0 warning" role="alert" style=" margin-left: auto; margin-right: auto;">
+                    <p class="warningText">{{ msg }}</p>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 {% endfor %}
             {% endif %}
             {% endwith %}
-        </div>
+        </div>  
         <div class="row" >
             <div class="col"> </div>
-            <div class="col-6" style="background: rgb(38, 70, 83, 0.85); border-radius: 15px; filter: brightness(120%);">
+            <div class="col-10 col-lg-6" style="background: rgb(38, 70, 83, 0.85); border-radius: 15px; filter: brightness(120%);">
                 <div style="margin-top: 0;">
-                    <h1 class="my-3 display-3 mt-0 pt-5" style="color: #FFFAFB;">Welcome!</h1>
+                    <h1 class="my-3 display-3 mt-0 pt-4" style="color: #FFFAFB; font-family: 'Noto Serif', serif; font-weight: 400;">Welcome!</h1>
             
-                    <p style="color: #e7c97b;">Tired of adding courses to Google calendar manually? <br>
+                    <p style="color: #e7c97b; font-family: 'Noto Serif', serif;">Tired of adding courses to Google calendar manually? <br>
                         Try this tool and add classes with one click!
                     </p>
                     
                     <form action="" method='POST'>
-                        <p class="mt-3" style="color: lightblue; font-style: italic;">Try: ECON300, QAC201, PHIL210</p> 
-                        <input type="text" name="course" class="form-control mb-3 w-75" placeholder="Search for Fall 2021" style="margin-left:auto; margin-right: auto; text-transform:uppercase;">
-                        <input type="submit" value="Submit" class="form-control-sm mb-4" style="width: 20%; margin-left:auto; margin-right: auto;">
+                        <p class="mt-3" style="color: lightblue; font-family: 'Noto Serif', serif; font-style: italic;">Try: ECON300, QAC201, PHIL210</p> 
+                        <input type="text" name="course" class="form-control mb-3 w-75" placeholder="Search for Fall 2021" style="font-family: 'Noto Serif', serif; margin-left:auto; margin-right: auto; text-transform:uppercase;">
+                        <input type="submit" value="Submit" class="form-control-sm mb-4" style="font-family: 'Noto Serif', serif; width: 30%; margin-left:auto; margin-right: auto;">
                     </form>
                 </div>
             </div>
             <div class="col"></div>
         </div>
       </div>
-
-
 </div>
 
 <div style="position: relative">
-    <p style="font-size: 10px; position: fixed; bottom: 0; width:100%; text-align: center; font-size: smaller; color: #ffffff; text-shadow: 1px 1px #0C1B33;">Created by Lewis Chao
+    <p style="font-family: 'Noto Serif', serif; font-size: 10px; position: fixed; bottom: 0; width:100%; text-align: center; font-size: smaller; color: #ffffff; text-shadow: 1px 1px #0C1B33;">Created by Lewis Chao
     </p>
 </div>
-{% endblock %}
 
+{% endblock %}
