@@ -1,8 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-from bs4 import BeautifulSoup, SoupStrainer
-from collections import namedtuple, Counter; from datetime import time, datetime; from itertools import product
-import re, math, time, csv, copy
-import urllib.request, urllib.error, urllib.parse, ssl, re, unicodedata, time, copy
+from bs4 import BeautifulSoup
+from collections import namedtuple
+import urllib.request, urllib.error, urllib.parse, ssl, re, unicodedata
 
 
 def fetchData(url):
@@ -82,7 +81,6 @@ def processTime(courseDict_original):
         if timeString == 'TBA':
             return 'TBA'
         else:
-            end_list = list()
             Course = namedtuple('timeObject', ['MO', 'TU', 'WE', 'TH', 'FR'], defaults=[0, 0, 0, 0, 0])
             ins = {'M': (0, 0), 'T': (0, 0), 'W': (0, 0), 'R': (0, 0), 'F': (0, 0)}
             result = re.search(
@@ -102,7 +100,6 @@ def processTime(courseDict_original):
 
     def formatTime(inputString):
         if createTime(inputString) != 'TBA':
-            end_list = list()
             temp_dict = {'M':'MO', 'T':'TU', 'W':'WE', 'R':'TH', 'F':'FR'}
             temp_dict2 = {'MO':'20210906', 'TU':'20210907', 'WE':'20210908', 'TH':'20210909', 'FR':'20210910'}
             firstDay, firstDate = '', ''
@@ -134,12 +131,12 @@ def processTime(courseDict_original):
                 if time_final != 'TBA': 
                     link = ("https://calendar.google.com/calendar/u/0/r/eventedit?dates={}/{}"
                     "&ctz=America/New_York&recur=RRULE:FREQ=WEEKLY;UNTIL=20211210T235900;WKST=SU;BYDAY={}&"
-                    "location={}&text={}&details=Instructor: {} <br/> Classroom: {}")
+                    "text={}&details=Instructor: {} <br/> Classroom: {}")
                     startTime, endTime, classDay = time_final[1], time_final[2], time_final[0]
                     instructor, location, courseId = val[2], val[3], val[0]
                     instructor = val[2] if instructor != '' else 'STAFF'
-                    location_inlink = '' if location == 'TBA' else location # UPDATE THIS!
-                    result = link.format(startTime, endTime, classDay, location_inlink, courseId, instructor, location)
+                    # location_inlink = '' if location == 'TBA' else location # UPDATE THIS!
+                    result = link.format(startTime, endTime, classDay, courseId, instructor, location)
                     tempList.append(result)
                 else:
                     tempList.append(time_final)
@@ -155,8 +152,8 @@ def processTime(courseDict_original):
 
 app = Flask(__name__)
 app.secret_key = "goWes2021"
-catalog = get_courses("Catalog - Wesleyan University - 20210424.html")
-crossDict = get_crosslisting("Catalog - Wesleyan University - 20210424.html")
+catalog = get_courses("Catalog - Wesleyan University - 20210820.html")
+crossDict = get_crosslisting("Catalog - Wesleyan University - 20210820.html")
 
 @app.route("/", methods=["POST","GET"])
 def newSearch():
