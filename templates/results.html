@@ -3,6 +3,7 @@
 {% block head %}
 <title>Results</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
 <style>
     table, td, th {
         margin-right: auto;
@@ -21,6 +22,7 @@
         background-repeat: no-repeat;
         background-size: cover;
     }
+
 </style>
 {% endblock %}
 
@@ -36,14 +38,17 @@
         <div class="row">
             <div class="col"></div>
             <div class="col-12 col-lg-8" style="background-color: rgba(255, 255, 255, 0.37); max-width: 80%; margin-right: auto; margin-left: auto;  border-radius: 10px;"> 
-                <h2 class="pt-3 mb-4 mt-1"><a href="{{catalog[session["courseName"]]}}" target="_blank" rel="noopener noreferrer" style="color:#fdfcf2;">{{mystr2}}</a> </h2>
+
                 
+                    
+                <h2 class="pt-3 mb-4 mt-1" ><a href="{{catalog[session["courseName"]]}}" target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-bs-placement="right" title="Click for offical Wesmap"  style="color:#fdfcf2; white-space: nowrap;">{{mystr2}}</a> </h2>
+
                 <table class="py-3" style="margin-right: auto; margin-left: auto; color:#ffffff ">
                     <tr style="color:#ffffff">
                         <td class="px-2">Section</td>
                         <td>Instructor</td>
     
-                        <td class="px-2">Add to Calendar</td>
+                        <td class="px-2" data-toggle="tooltip" data-bs-placement="right" title="You'll need all the links in your section if there're multiple" >Add to Calendar</td>
                     </tr>
                     {% for item in data %} 
                     <tr>
@@ -68,7 +73,6 @@
                     </tr>
                     {% endfor %}
                 </table>
-                <p class="mt-2" style="color: white;">The link in title takes you to the official WesMap!</p>
 
 
                 <div class="my-3">
