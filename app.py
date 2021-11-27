@@ -21,6 +21,8 @@ def fetchData(url):
     find_time = soup.findAll(string='Times:')
     find_teacher = soup.findAll(string='Instructor(s):') #TWO TEACH?
     find_loc = soup.findAll(string='Location:') #TWO LOC?
+    find_end = soup.findAll(string=['In-person only', 'In-person only - 3rd Quarter', 'In-person only - 4th Quarter'])
+    temp_dict = {'In-person only': '20220504', 'In-person only - 3rd Quarter': '20220304', 'In-person only - 4th Quarter': '20220504'}
     res_dict = {}
     for i in range(len(all_sect)):
         secName = course_id+'_'+all_sect[i].strip()[-2:]
@@ -31,8 +33,9 @@ def fetchData(url):
             regex = re.search(r"([a-zA-ZÀ-ú]*),([a-zA-Z .À-ú]*)", teacher)
             rearragne.append(regex.group(2) + ' ' + regex.group(1))  
         secLoc = unicodedata.normalize('NFKD',find_loc[i].next_element).strip()
-        res_dict[secName] = [fullName, secTime, ", ".join(rearragne), secLoc,[]]
-    
+        res_dict[secName] = [fullName, secTime, ", ".join(rearragne), secLoc, temp_dict[find_end[i]]]
+        print(res_dict[secName])
+
     if res_dict:
         return res_dict
     else:
@@ -101,10 +104,10 @@ def processTime(courseDict_original):
     def formatTime(inputString):
         if createTime(inputString) != 'TBA':
             temp_dict = {'M':'MO', 'T':'TU', 'W':'WE', 'R':'TH', 'F':'FR'}
-            temp_dict2 = {'MO':'20210906', 'TU':'20210907', 'WE':'20210908', 'TH':'20210909', 'FR':'20210910'}
+            temp_dict2 = {'MO':'20220124', 'TU':'20220125', 'WE':'20220126', 'TH':'20220120', 'FR':'20220121'}
             firstDay, firstDate = '', ''
             daylist = list()
-            for weekday in inputString.strip()[:8]:
+            for weekday in inputString.strip()[4:7]+inputString.strip()[:4]:
                 if weekday in ['M', 'T', 'W', 'R', 'F']:
                     daylist.append(temp_dict[weekday]) 
             firstDay = daylist[0]
@@ -123,6 +126,7 @@ def processTime(courseDict_original):
         location={LOCATION. ‘ ’ if TBD}&text={COURSE ID}&details=Instructor: {INSTRUCTOR} <br/> Classroom: {LOCATION}
         """
         resultList = list()
+        print("here",courseDict_final)
         for section, val in courseDict_final.items():
             mylist = re.findall(r'(.*?);', courseDict_original[section][1])
             tempList = list()
@@ -130,13 +134,13 @@ def processTime(courseDict_original):
                 time_final = formatTime(timing)
                 if time_final != 'TBA': 
                     link = ("https://calendar.google.com/calendar/u/0/r/eventedit?dates={}/{}"
-                    "&ctz=America/New_York&recur=RRULE:FREQ=WEEKLY;UNTIL=20211210T235900;WKST=SU;BYDAY={}&"
+                    "&ctz=America/New_York&recur=RRULE:FREQ=WEEKLY;UNTIL={}T235900;WKST=SU;BYDAY={}&"
                     "text={}&details=Instructor: {} <br/> Classroom: {}")
                     startTime, endTime, classDay = time_final[1], time_final[2], time_final[0]
-                    instructor, location, courseId = val[2], val[3], val[0]
+                    instructor, location, courseId, sem = val[2], val[3], val[0], val[4]
                     instructor = val[2] if instructor != '' else 'STAFF'
                     # location_inlink = '' if location == 'TBA' else location # UPDATE THIS!
-                    result = link.format(startTime, endTime, classDay, courseId, instructor, location)
+                    result = link.format(startTime, endTime, sem, classDay, courseId, instructor, location)
                     tempList.append(result)
                 else:
                     tempList.append(time_final)
@@ -152,8 +156,8 @@ def processTime(courseDict_original):
 
 app = Flask(__name__)
 app.secret_key = "goWes2021"
-catalog = get_courses("Catalog - Wesleyan University - 20210820.html")
-crossDict = get_crosslisting("Catalog - Wesleyan University - 20210820.html")
+catalog = get_courses("Catalog - Wesleyan University - 20211126.html")
+crossDict = get_crosslisting("Catalog - Wesleyan University - 20211126.html")
 
 @app.route("/", methods=["POST","GET"])
 def newSearch():
